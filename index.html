@@ -1,0 +1,87 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+</head>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link href="css/frontend.css" rel="stylesheet">
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link rel="icon" type="qr-scan/image/png" href="favicon.png">
+
+<script type="text/javascript" src="qr-scan/vue.min.js"></script>
+<script type="text/javascript" src="qr-scan/instascan.min.js"></script>
+<script type="text/javascript">
+function reCaculate(){
+  new Audio('qr-scan/coin.mp3').play();
+  var init_num = 0;
+	for (i=0; i<$(".scans li").length; i++){
+		//var total = init_num += parseInt(r.result.slice(29, 37), 16);
+		var parsetoInt = parseInt($(".scans li")[i].innerHTML.split("| ")[1]);
+		if (isNaN(parsetoInt) != true){
+			init_num += parsetoInt
+		}
+		document.getElementById('money').innerHTML = init_num+'$';
+	}
+}
+</script>
+</style>
+  <div class="container-fluid ">
+
+
+    <div class=" wrapper container-fluid">
+
+
+      <div class="row feature-row">
+        <div class="col-md-12">
+
+      <!-- tabs bottom -->
+      <div class="tabbable tabs-below">
+        <div class="tab-content">
+         <div class="tab-pane active" id="one_">
+           <div id="app" class="panel">
+            <div class="sidebar col-md-4">
+              <section class="cameras">
+                <h2>金額</h2>
+                <!-- 攻城屍ㄉ浪漫色 -->
+                  <p id="money" style="text-align: left; font-size:200%; color: rgb(102,214,222);" >0$</p>
+                  <button style="font-size:200%;" onclick="reCaculate()">金額重計</button>
+                <h2>統編</h2>
+                  <p>統編一<input name="vat" value="" style="border: 2px solid rgb(167, 224, 65);"></input></p></br>
+                  <p>統編二<input name="vat" value="" style="border: 2px solid rgb(247, 45, 115);"></input></p></br>
+                  <p>統編三<input name="vat" style="border: 2px solid rgb(242, 179, 43); "></input></p>
+                <h2>相機</h2>
+                <ul>
+                  <li v-if="cameras.length === 0" class="empty">找不到相機或鏡頭</li>
+                  <li v-for="camera in cameras">
+                    <span v-if="camera.id == activeCameraId" :title="formatName(camera.name)" class="active">{{ formatName(camera.name) }}</span>
+                    <span v-if="camera.id != activeCameraId" :title="formatName(camera.name)">
+                      <a @click.stop="selectCamera(camera)">{{ formatName(camera.name) }}</a>
+                    </span>
+                  </li>
+                </ul>
+              </section>
+              <section class="scans">
+                <h2>發票</h2>
+                <ul v-if="scans.length === 0">
+                  <li class="empty">未掃描任何發票</li>
+                </ul>
+                <transition-group name="scans" tag="ul">
+                  <li v-for="scan in scans" :key="scan.date" :title="scan.content">{{ scan.content.slice(0, 10) + " | " + parseInt(scan.content.slice(29, 37), 16) }}</li>
+                </transition-group>
+              </section>
+            </div>
+            <div class="preview-container col-md-8">
+              <video id="preview"></video>
+            </div>
+          </div>
+          <script type="text/javascript" src="qr-scan/app.js"></script></div>
+         <div class="tab-pane" id="two_"></div>
+        </div>
+      </div>
+      <!-- /tabs -->
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</html>
